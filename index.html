@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Comatose Patients</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script
+src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<style type="text/css">
+#dis{
+color: #fff;
+padding: 10px;
+display: inline-block;
+border-radius: 5px;
+font-size: 16px;
+margin: 36px 2px;
+padding: 14px 75px;
+animation: blinkingBackground 2s infinite;
+}
+#mot{
+color: #fff;
+padding: 10px;
+display: inline-block;
+border-radius: 5px;
+font-size: 16px;
+margin: 36px 2px;
+padding: 14px 30px;
+animation: blinkingBackground 2s infinite;
+}
+@keyframes blinkingBackground{
+0% { background-color: blue;}
+25% { background-color: blue;}
+50% { background-color: blue;}
+99% { background-color: blue;}
+100% { background-color: blue;}
+}
+@keyframes blinkingBackground2{
+99% { background-color: #F00000;}
+}
+</style>
+</head>
+<body background="bg-img.jpg">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<div class="row">
+<h1 style="padding-left: 25px;"> Monitoring System for Comatose
+Patients </h1>
+<br>
+<div class="col-md-3">
+<i class='fas fa-walking' style='font-size:78px;padding: 20px 50px;'></i>
+</div>
+<div class="col-md-9">
+<div id="mot"></div>
+</div>
+</div>
+<br><br><br><br><br>
+<div class="row">
+<div class="col-md-3">
+<img src="b3.png" width="70%" height="150px">
+</div>
+<div class="col-md-9">
+<div id="dis"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function ()
+{
+GetData();
+});
+function GetData()
+{
+var url = 'https://api.thingspeak.com/channels/1213797/feeds.json?api_key=66BW5YSLZUH38S5G&results=2';
+$.ajax
+({
+url: url,
+type: 'GET',
+contentType: "application/json",
+//dataType: "json",
+//crossDomain: true,
+success: function (data, textStatus, xhr) {
+$.each(data, function (i, item) {
+if (i == 'feeds') {
+var ubound = item.length;
+var distance = item[ubound - 1].field1;
+var motion = item[ubound - 1].field2;
+console.log(distance);
+console.log(motion);
+if(distance > 10 && motion==0)
+{
+document.getElementById("dis").innerHTML = "Normal";
+document.getElementById("dis").style.animationName = "blinkingBackground";
+document.getElementById("mot").innerHTML = "No Motion Detected";
+document.getElementById("mot").style.animationName = "blinkingBackground";
+}
+else if(distance > 10 && motion==1)
+{
+document.getElementById("dis").innerHTML = "Normal";
+document.getElementById("dis").style.animationName = "blinkingBackground";
+document.getElementById("mot").innerHTML = "Motion Detected";
+document.getElementById("mot").style.animationName = "blinkingBackground2";
+}
+else if(distance < 10 && motion==0)
+{
+document.getElementById("dis").innerHTML = "Overflow";
+document.getElementById("dis").style.animationName = "blinkingBackground2";
+document.getElementById("mot").innerHTML ="No Motion Detected";
+document.getElementById("mot").style.animationName = "blinkingBackground";
+}
+else
+{
+document.getElementById("dis").innerHTML = "Overflow";
+document.getElementById("dis").style.animationName = "blinkingBackground2";
+document.getElementById("mot").innerHTML = "Motion Detected";
+document.getElementById("mot").style.animationName = "blinkingBackground2";
+}
+$('#txtField1').val(item[ubound - 1].field1);
+$('#txtField2').val(item[ubound - 1].field2);
+}
+});
+},
+error: function (xhr, textStatus, errorThrown) {
+alert(errorThrown);
+}
+});
+setTimeout(GetData, 10000);
+}
+</script>
+<!-- Field 1: <input id="txtField1" type="text" /><br>
+Field 2: <input id="txtField2" type="text" /><br><br> -->
+</body>
+</html>
