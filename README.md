@@ -1,1 +1,4 @@
 # IoT-Based-Monitoring-System-for-Comatose-Patients
+IOT Based Monitoring System for Comatose Patients using Raspberry Pi is a system which is very useful for doctors or nurses in the hospitals. This system basically keeps monitoring the patients which are in the comatose(comma) situation. It monitors two things; one is the urine bag which must not be full so to avoid overflow and the second, motion, that is whether there is any motion done by the patient. If there is any motion or overflow happens, for the patient then the doctors or nurses will be alerted through a website been working on their computer.
+
+Now a days, in this situation where the doctors and nurses are busy with their other works, it becomes difficult to keep care of such patients. Hence this system makes the works easier and allows the doctors to keep track of patients from anywhere at anytime. 
